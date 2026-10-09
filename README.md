@@ -50,6 +50,20 @@ La configuración de demostración de `.env.example` inicia con:
 
 Cambia estas credenciales y `JWT_SECRET` antes de desplegar la aplicación. La cuenta administradora se crea al inicializar la base de datos por primera vez. Para cambiar la contraseña después de la creación, actualiza el usuario mediante un proceso administrativo seguro; cambiar `ADMIN_PASSWORD` en el archivo de entorno no reemplaza automáticamente la contraseña almacenada.
 
+## Publicación en Render
+
+El archivo [`render.yaml`](./render.yaml) define un servicio Node.js y una base de datos PostgreSQL de Render. Para publicarlos:
+
+1. Inicia sesión en Render y elige **New → Blueprint**.
+2. Conecta el repositorio `eddybryan123/proyecto_de_web_senati` y selecciona la rama `main`.
+3. Antes de aplicar el Blueprint, proporciona `ADMIN_EMAIL` y un `ADMIN_PASSWORD` fuerte en Render. No uses ni publiques la contraseña de PostgreSQL local.
+4. Confirma la creación de los recursos y espera a que termine el primer despliegue. Render generará `JWT_SECRET` y conectará la app a PostgreSQL.
+5. Abre la URL del servicio y añade `/admin/login` para entrar al panel.
+
+El plan gratuito es apropiado para una demostración, pero tiene límites importantes: el servicio web puede tardar en despertar después de inactividad; PostgreSQL gratuito vence a los 30 días; y las imágenes cargadas al panel se guardan en el sistema de archivos efímero, por lo que pueden perderse al reiniciar, suspender o volver a desplegar el servicio. Revisa los límites actuales de Render antes de usarlo para conservar datos importantes.
+
+La base local no se copia automáticamente a Render. La app creará el esquema y el contenido inicial en la base remota al arrancar por primera vez.
+
 Comandos disponibles en PowerShell:
 
 ```powershell
