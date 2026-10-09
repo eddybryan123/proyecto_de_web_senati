@@ -47,8 +47,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .site-header nav a { color: #656474; font-size: 13px; font-weight: 550; transition: color .2s; }
 .site-header nav a:hover { color: var(--color-primary); }
 .header-cta { display: inline-flex; align-items: center; gap: 10px; color: var(--color-primary); font-size: 13px; font-weight: 700; }
-.dashboard-cta { padding: 11px 16px; border: 1px solid var(--color-primary); border-radius: 999px; white-space: nowrap; }
-.dashboard-cta:hover { background: var(--color-primary); color: white; }
+.dashboard-cta { padding: 11px 16px; border: 1px solid var(--color-primary); border-radius: 999px; background: var(--color-primary); color: white; white-space: nowrap; transition: background .2s, transform .2s; }
+.dashboard-cta:hover { background: color-mix(in srgb, var(--color-primary), black 12%); transform: translateY(-1px); }
 .header-cta span, .button span { font-size: 17px; }
 .hero-section {
   min-height: 630px; display: grid; grid-template-columns: 1fr 1fr; align-items: center;
