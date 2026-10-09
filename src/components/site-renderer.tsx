@@ -39,6 +39,9 @@ export async function SiteRenderer({ components }: { components: PageComponent[]
         <nav aria-label="Navegación principal">
           {menu.map((item) => <a key={item.id} href={item.href}>{item.label}</a>)}
         </nav>
+        <Link className="header-cta dashboard-cta" href="/admin/login">
+          Dashboard <span aria-hidden="true">↗</span>
+        </Link>
         <a className="header-cta" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
       </header>
       <main>
