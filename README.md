@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nexo CMS
 
-## Getting Started
+Sistema de gestión de contenidos adaptable con sitio público y panel de administración. El contenido del sitio, los colores, el logotipo y la navegación se administran desde el panel, sin modificar el código.
 
-First, run the development server:
+## Requisitos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 20.9 o posterior.
+- npm.
+- PostgreSQL 14 o posterior y una base de datos local llamada `nexo_cms`.
+
+La aplicación usa Next.js para el sitio, el panel y su API REST; PostgreSQL para guardar los datos; JWT en cookies `httpOnly` para las sesiones y Sharp para optimizar imágenes.
+
+## Instalación y ejecución
+
+```powershell
+npm.cmd install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Instala PostgreSQL desde [postgresql.org/download/windows](https://www.postgresql.org/download/windows/) y anota la contraseña que elegiste para el usuario `postgres`. Abre **SQL Shell (psql)**, acepta `localhost`, el puerto `5432` y la base inicial `postgres`; inicia sesión con el usuario `postgres` y esa contraseña. En la consola de PostgreSQL, crea una base de datos vacía:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sql
+CREATE DATABASE nexo_cms;
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+En la carpeta del proyecto, crea `.env.local` a partir de `.env.example` si aún no existe:
 
-## Learn More
+```powershell
+Copy-Item .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Abre `.env.local` y reemplaza `CAMBIA_ESTA_CLAVE` por la contraseña de PostgreSQL. Si la contraseña contiene caracteres reservados de URL (por ejemplo `@`, `:`, `/` o `#`), codifícala para la URL o elige una contraseña fuerte sin esos caracteres. El resto de la cadena local ya apunta a la base `nexo_cms`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```dotenv
+DATABASE_URL=postgresql://postgres:TU_CLAVE@localhost:5432/nexo_cms
+DATABASE_SSL=false
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+La aplicación crea las tablas y los datos iniciales al arrancar por primera vez:
 
-## Deploy on Vercel
+```powershell
+npm.cmd run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Visita [http://localhost:3000](http://localhost:3000) para ver el sitio y [http://localhost:3000/admin](http://localhost:3000/admin) para entrar al panel. PostgreSQL debe estar ejecutándose; en Windows puedes comprobar el servicio **postgresql-x64-XX** en la aplicación Servicios.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+La configuración de demostración de `.env.example` inicia con:
+
+- Correo: `admin@nexo.local`
+- Contraseña: `NexoDemo2026!`
+
+Cambia estas credenciales y `JWT_SECRET` antes de desplegar la aplicación. La cuenta administradora se crea al inicializar la base de datos por primera vez. Para cambiar la contraseña después de la creación, actualiza el usuario mediante un proceso administrativo seguro; cambiar `ADMIN_PASSWORD` en el archivo de entorno no reemplaza automáticamente la contraseña almacenada.
+
+Comandos disponibles en PowerShell:
+
+```powershell
+npm.cmd run dev      # servidor de desarrollo
+npm.cmd run lint     # revisión estática
+npm.cmd run build    # compilación de producción
+npm.cmd run start    # servidor de producción
+npm.cmd run db:migrate-sqlite # importar la base local SQLite existente
+```
+
+Las imágenes optimizadas se guardan en `public/uploads/`. Haz copias de seguridad de este directorio y de la base PostgreSQL al desplegar.
+
+## Funcionalidades
+
+- Sitio público responsivo con bloques de portada, texto, tarjetas y llamada a la acción.
+- Panel con inicio de sesión, resumen, editor de páginas y borradores/publicación.
+- Personalización de marca, descripción, logo y cuatro colores globales.
+- Menú editable con orden, visibilidad y destinos.
+- Carga de JPG, PNG, WebP y AVIF de hasta 8 MB. Sharp corrige la orientación, convierte a WebP y crea versiones responsivas.
+- Endpoints de administración protegidos por sesión de rol administrador.
+- Los borradores no aparecen en páginas públicas ni en la API pública.
+
+## Persistencia y modelo de datos
+
+PostgreSQL mantiene las entidades normalizadas: `users`, `site_config`, `pages`, `page_components` y `menu_items`. Cada tabla tiene una responsabilidad, y las claves/relaciones separan usuarios, configuración, páginas, navegación y bloques. La estructura modular se almacena como `JSONB` en `page_components.content_json`, vinculada a `pages` con borrado en cascada.
+
+Si ya usabas el CMS con SQLite, conserva `data/cms.sqlite`. Inicia la aplicación una vez para crear las tablas de PostgreSQL, detenla con `Ctrl+C` y ejecuta `npm.cmd run db:migrate-sqlite`. El comando copia los usuarios (incluido el hash de contraseña), los ajustes, las páginas, los bloques y el menú; es seguro volver a ejecutarlo. El archivo SQLite no se borra.
+
+El diagrama entidad-relación está en [`docs/er-diagram.svg`](./docs/er-diagram.svg).
+
+## API REST
+
+Las rutas de administración requieren la cookie de sesión emitida por `POST /api/auth/login`. La colección importable de Postman, con ejemplos y autenticación mediante cookie, está en [`postman_collection.json`](./postman_collection.json).
+
+| Método | Ruta | Acceso | Uso |
+| --- | --- | --- | --- |
+| `POST` | `/api/auth/login` | Público | Validar credenciales e iniciar sesión |
+| `POST` | `/api/auth/logout` | Público | Cerrar sesión |
+| `GET` | `/api/auth/session` | Sesión | Consultar la sesión actual |
+| `GET` | `/api/site-config` | Público | Leer identidad visual |
+| `PATCH` | `/api/site-config` | Administrador | Actualizar marca y colores |
+| `GET` | `/api/menu` | Público | Leer enlaces visibles del menú |
+| `PUT` | `/api/menu` | Administrador | Reemplazar y ordenar enlaces |
+| `GET` | `/api/pages` | Público / admin | Listar páginas publicadas; con sesión, también borradores |
+| `POST` | `/api/pages` | Administrador | Crear un borrador |
+| `GET` | `/api/pages/{id-o-slug}` | Público / admin | Leer página publicada o, con sesión, un borrador |
+| `PUT` | `/api/pages/{id-o-slug}` | Administrador | Actualizar página y bloques |
+| `DELETE` | `/api/pages/{id-o-slug}` | Administrador | Eliminar página y sus bloques |
+| `POST` | `/api/media` | Administrador | Optimizar una imagen (`multipart/form-data`, campo `file`) |
+
+Los colores deben ser HEX `#RRGGBB`. Los destinos del menú admiten rutas locales, HTTPS y `mailto:`. Los bloques aceptados son `hero`, `text`, `cards` y `cta`.
+
+## Seguridad y despliegue
+
+- Guarda `DATABASE_URL` y los secretos en el gestor de variables de entorno de tu proveedor y no publiques `.env.local`.
+- Usa un `JWT_SECRET` aleatorio con al menos 32 caracteres y HTTPS en producción; la cookie se marca `Secure` automáticamente en `NODE_ENV=production`.
+- El login compara contraseñas con bcrypt y la cookie de sesión es `httpOnly`, `SameSite=Strict` y expira a las 8 horas.
+- Configura PostgreSQL administrado y almacenamiento persistente para `public/uploads/`. En proveedores que requieren TLS, establece `DATABASE_SSL=true`; el servidor valida los certificados. El disco local de medios es efímero en despliegues serverless, así que migra las imágenes a almacenamiento de objetos para producción.

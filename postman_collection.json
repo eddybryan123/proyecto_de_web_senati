@@ -1,0 +1,93 @@
+{
+  "info": {
+    "name": "Nexo CMS API",
+    "description": "API REST del CMS. Ejecuta Iniciar sesión primero; Postman conservará la cookie httpOnly para las rutas protegidas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "pageId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Iniciar sesión",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@nexo.local\",\n  \"password\": \"NexoDemo2026!\"\n}" },
+            "url": "{{baseUrl}}/api/auth/login"
+          }
+        },
+        { "name": "Consultar sesión", "request": { "method": "GET", "url": "{{baseUrl}}/api/auth/session" } },
+        { "name": "Cerrar sesión", "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/logout" } }
+      ]
+    },
+    {
+      "name": "Sitio y navegación",
+      "item": [
+        { "name": "Leer identidad visual", "request": { "method": "GET", "url": "{{baseUrl}}/api/site-config" } },
+        {
+          "name": "Actualizar identidad visual",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Nexo\",\n  \"primaryColor\": \"#6759E8\",\n  \"accentColor\": \"#C8F169\"\n}" },
+            "url": "{{baseUrl}}/api/site-config"
+          }
+        },
+        { "name": "Leer menú", "request": { "method": "GET", "url": "{{baseUrl}}/api/menu" } },
+        {
+          "name": "Reemplazar menú",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "[\n  { \"label\": \"Inicio\", \"href\": \"/\", \"visible\": true },\n  { \"label\": \"Servicios\", \"href\": \"#servicios\", \"visible\": true }\n]" },
+            "url": "{{baseUrl}}/api/menu"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Páginas y bloques",
+      "item": [
+        { "name": "Listar páginas", "request": { "method": "GET", "url": "{{baseUrl}}/api/pages" } },
+        {
+          "name": "Crear borrador",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Acerca de nosotros\"\n}" },
+            "url": "{{baseUrl}}/api/pages"
+          }
+        },
+        { "name": "Leer página", "request": { "method": "GET", "url": "{{baseUrl}}/api/pages/{{pageId}}" } },
+        {
+          "name": "Actualizar y publicar página",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Inicio\",\n  \"slug\": \"inicio\",\n  \"status\": \"published\",\n  \"components\": [\n    {\n      \"type\": \"hero\",\n      \"position\": 0,\n      \"content\": {\n        \"eyebrow\": \"ESTUDIO DIGITAL\",\n        \"title\": \"Una gran idea.\",\n        \"body\": \"Cuéntale tu historia al mundo.\",\n        \"buttonText\": \"Conócenos\",\n        \"buttonHref\": \"#contacto\"\n      }\n    }\n  ]\n}" },
+            "url": "{{baseUrl}}/api/pages/{{pageId}}"
+          }
+        },
+        { "name": "Eliminar página", "request": { "method": "DELETE", "url": "{{baseUrl}}/api/pages/{{pageId}}" } }
+      ]
+    },
+    {
+      "name": "Medios",
+      "item": [
+        {
+          "name": "Subir y optimizar imagen",
+          "request": {
+            "method": "POST",
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": "" }] },
+            "url": "{{baseUrl}}/api/media"
+          }
+        }
+      ]
+    }
+  ]
+}
