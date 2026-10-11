@@ -67,6 +67,10 @@ En un hosting como Render, el sistema de archivos predeterminado puede ser efím
 
 Las rutas de administración requieren la sesión emitida por `POST /api/auth/login`.
 
+La entrega de **Semana 1: Cimientos**, con el diagrama entidad-relación, el
+servidor Node.js y la guía de prueba de autenticación, está en
+[docs/semana-1-entrega.md](docs/semana-1-entrega.md).
+
 | Método | Ruta | Acceso | Uso |
 | --- | --- | --- | --- |
 | `GET` | `/api/products` | Público / administrador | Listar productos visibles; el administrador también ve los ocultos |
