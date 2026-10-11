@@ -6,6 +6,15 @@ export type SiteConfig = {
   backgroundColor: string;
   foregroundColor: string;
   logoUrl: string;
+  whatsappPhone: string;
+};
+
+export type Product = {
+  id: number;
+  name: string;
+  description: string;
+  priceCents: number;
+  isActive: boolean;
 };
 
 export type MenuItem = {

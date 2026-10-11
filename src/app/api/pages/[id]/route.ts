@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, isUnauthorized, requireAdmin } from "@/lib/auth";
-import { executeQuery, readRows, withTransaction } from "@/lib/db";
+import { executeQuery, isUniqueConstraintError, readRows, withTransaction } from "@/lib/db";
 import type { Page, PageComponent } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -94,7 +94,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       }
     });
   } catch (error) {
-    if (error && typeof error === "object" && "code" in error && error.code === "23505") {
+    if (isUniqueConstraintError(error)) {
       return NextResponse.json({ error: "Ya existe una página con esa URL." }, { status: 409 });
     }
     throw error;

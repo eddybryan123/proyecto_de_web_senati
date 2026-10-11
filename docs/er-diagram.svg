@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
-  <title id="title">Diagrama entidad-relación de Nexo CMS</title>
-  <desc id="desc">Cinco tablas: users, site_config, pages, page_components y menu_items. Una página contiene varios componentes.</desc>
+  <title id="title">Diagrama entidad-relación de Nexo Store</title>
+  <desc id="desc">Seis tablas SQLite: users, site_config, pages, page_components, menu_items y products. Una página contiene varios componentes.</desc>
   <defs>
     <style>
       text { font-family: Arial, sans-serif; fill: #27253c; }
@@ -13,7 +13,7 @@
     </style>
   </defs>
   <rect width="1100" height="680" fill="#f8f7fb"/>
-  <text x="50" y="56" class="heading">Nexo CMS · Modelo entidad-relación</text>
+  <text x="50" y="56" class="heading">Nexo Store · Modelo SQLite</text>
   <g transform="translate(70 125)">
     <rect class="box" width="280" height="170"/>
     <path class="head" d="M12 0h256a12 12 0 0 1 12 12v43H0V12A12 12 0 0 1 12 0"/>
@@ -38,7 +38,16 @@
     <text x="22" y="111" class="field">label · href · position</text>
     <text x="22" y="138" class="field">visible</text>
   </g>
-  <g transform="translate(245 410)">
+  <g transform="translate(70 410)">
+    <rect class="box" width="280" height="190"/>
+    <path class="head" d="M12 0h256a12 12 0 0 1 12 12v43H0V12A12 12 0 0 1 12 0"/>
+    <text x="22" y="36" class="heading">products</text>
+    <text x="22" y="80" class="field">PK  id</text>
+    <text x="22" y="105" class="field">name · description</text>
+    <text x="22" y="130" class="field">price_cents</text>
+    <text x="22" y="155" class="field">is_active · created_at</text>
+  </g>
+  <g transform="translate(390 410)">
     <rect class="box" width="280" height="182"/>
     <path class="head" d="M12 0h256a12 12 0 0 1 12 12v43H0V12A12 12 0 0 1 12 0"/>
     <text x="22" y="36" class="heading">pages</text>
@@ -47,7 +56,7 @@
     <text x="22" y="138" class="field">UQ  slug</text>
     <text x="22" y="165" class="field">updated_at</text>
   </g>
-  <g transform="translate(575 410)">
+  <g transform="translate(720 410)">
     <rect class="box" width="355" height="182"/>
     <path class="head" d="M12 0h331a12 12 0 0 1 12 12v43H0V12A12 12 0 0 1 12 0"/>
     <text x="22" y="36" class="heading">page_components</text>
@@ -56,7 +65,7 @@
     <text x="22" y="138" class="field">position · type</text>
     <text x="22" y="165" class="field">content_json</text>
   </g>
-  <path class="line" d="M525 501h50"/>
-  <text x="531" y="486" class="sub">1 : N</text>
+  <path class="line" d="M670 501h50"/>
+  <text x="676" y="486" class="sub">1 : N</text>
   <text x="70" y="636" class="sub">PK clave primaria · FK clave foránea · UQ valor único · Los componentes se eliminan junto a su página.</text>
 </svg>

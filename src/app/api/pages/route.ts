@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, isUnauthorized, requireAdmin } from "@/lib/auth";
-import { readRows } from "@/lib/db";
+import { isUniqueConstraintError, readRows } from "@/lib/db";
 import type { Page, PageComponent } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -58,13 +58,13 @@ export async function POST(request: NextRequest) {
        RETURNING id, updated_at AS "updatedAt"`,
       [title, slug],
     );
-    if (!created) throw new Error("PostgreSQL no devolvió la página recién creada.");
+    if (!created) throw new Error("SQLite no devolvió la página recién creada.");
     return NextResponse.json(
       { ...created, title, slug, status: "draft", components: [] },
       { status: 201 },
     );
   } catch (error) {
-    if (error && typeof error === "object" && "code" in error && error.code === "23505") {
+    if (isUniqueConstraintError(error)) {
       return NextResponse.json({ error: "Ya existe una página con esa URL." }, { status: 409 });
     }
     throw error;

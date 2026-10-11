@@ -4,14 +4,16 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { fetchJson } from "@/lib/client-api";
+import { ProductManager } from "@/components/product-manager";
 import type { ComponentType, MenuItem, Page, PageComponent, SiteConfig } from "@/lib/types";
 
-type Section = "home" | "pages" | "appearance" | "menu";
+type Section = "home" | "pages" | "products" | "appearance" | "menu";
 type Session = { email: string; role: string };
 
 const sectionLabels: Record<Section, string> = {
   home: "Resumen",
   pages: "Páginas",
+  products: "Productos",
   appearance: "Apariencia",
   menu: "Menú",
 };
@@ -24,6 +26,7 @@ const componentLabels: Record<ComponentType, string> = {
 const blankConfig: SiteConfig = {
   name: "", description: "", primaryColor: "#6759E8", accentColor: "#C8F169",
   backgroundColor: "#F7F7FB", foregroundColor: "#191827", logoUrl: "",
+  whatsappPhone: "",
 };
 
 function defaultBlock(type: ComponentType, position: number): PageComponent {
@@ -329,6 +332,7 @@ export function AdminDashboard() {
           {([
             ["home", "⌂", "Resumen"],
             ["pages", "▤", "Páginas"],
+            ["products", "◈", "Productos"],
             ["appearance", "◉", "Apariencia"],
             ["menu", "☷", "Menú"],
           ] as [Section, string, string][]).map(([key, icon, label]) => (
@@ -396,6 +400,7 @@ export function AdminDashboard() {
               <div className="editor-footer"><button className="danger-action" type="button" onClick={deletePage}>Eliminar página</button><div className="form-actions"><button className="secondary-action" type="button" onClick={() => setPage(null)}>Cancelar</button><button className="primary-action" type="submit" disabled={busy}>{busy ? "Guardando..." : page.status === "published" ? "Guardar y publicar" : "Guardar borrador"}</button></div></div>
             </form>
           )}
+          {section === "products" && <ProductManager />}
           {section === "appearance" && (
             <>
               <div className="admin-heading"><div><h1>La identidad de tu marca</h1><p>Actualiza los colores y la información que dan personalidad a tu sitio.</p></div></div>
@@ -420,6 +425,7 @@ export function AdminDashboard() {
                   <h2 className="panel-title">Información del sitio</h2>
                   <div className="form-field"><label htmlFor="brand-name">Nombre de tu marca</label><input id="brand-name" maxLength={80} value={config.name} onChange={(event) => setConfig((current) => ({ ...current, name: event.target.value }))} /></div>
                   <div className="form-field"><label htmlFor="brand-description">Descripción breve</label><textarea id="brand-description" maxLength={250} value={config.description} onChange={(event) => setConfig((current) => ({ ...current, description: event.target.value }))} /></div>
+                  <div className="form-field"><label htmlFor="whatsapp-phone">WhatsApp de pedidos</label><input id="whatsapp-phone" inputMode="tel" maxLength={24} placeholder="51987654321 (incluye el código de país)" value={config.whatsappPhone} onChange={(event) => setConfig((current) => ({ ...current, whatsappPhone: event.target.value }))} /><small className="field-hint">Solo números con código de país; por ejemplo, 51 para Perú.</small></div>
                   <div className="form-field"><span className="field-label">Logotipo</span><div className="upload-control"><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" aria-label="Seleccionar logotipo" onChange={(event) => uploadLogo(event.target.files?.[0])} />{config.logoUrl && <button className="quiet-action" type="button" onClick={() => setConfig((current) => ({ ...current, logoUrl: "" }))}>Quitar logo</button>}</div></div>
                   <div className="form-actions"><button className="primary-action" type="submit" disabled={busy}>{busy ? "Guardando..." : "Guardar identidad"}</button></div>
                 </div>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="85" y1="53" x2="643" y2="507" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9F5F5"/>
+      <stop offset="1" stop-color="#C9E4E6"/>
+    </linearGradient>
+    <linearGradient id="case" x1="226" y1="188" x2="500" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF"/>
+      <stop offset="1" stop-color="#DAE3E7"/>
+    </linearGradient>
+    <linearGradient id="bud" x1="275" y1="200" x2="322" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF"/>
+      <stop offset="1" stop-color="#BACAD0"/>
+    </linearGradient>
+    <linearGradient id="cable" x1="351" y1="300" x2="503" y2="451" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8173F1"/>
+      <stop offset="1" stop-color="#5445CB"/>
+    </linearGradient>
+    <filter id="shadow" x="142" y="151" width="437" height="343" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+  <path fill="url(#bg)" d="M0 0h720v560H0z"/>
+  <circle cx="557" cy="117" r="94" fill="#fff" fill-opacity=".34"/>
+  <circle cx="133" cy="435" r="74" fill="#fff" fill-opacity=".37"/>
+  <path stroke="#fff" stroke-opacity=".72" stroke-width="2" d="M93 146h94m-47-47v94M532 423h96m-48-48v96"/>
+  <ellipse cx="359" cy="430" fill="#2D5961" fill-opacity=".2" rx="168" ry="26" filter="url(#shadow)"/>
+  <path fill="url(#case)" stroke="#AFBEC4" stroke-width="3" d="M246 259c0-69 51-120 114-120s114 51 114 120v58c0 62-49 108-114 108s-114-46-114-108v-58Z"/>
+  <path stroke="#B5C4C9" stroke-width="3" d="M248 300h224"/>
+  <path stroke="#FFF" stroke-linecap="round" stroke-opacity=".92" stroke-width="5" d="M270 179c20-21 47-32 77-33"/>
+  <path fill="url(#bud)" stroke="#A9B9C0" stroke-width="3" d="M234 136c0-27 21-48 48-48h19c27 0 49 22 49 49v42c0 26-15 49-39 60l-10 5v38c0 16-13 29-29 29h-7c-17 0-30-13-30-29V136Z"/>
+  <path fill="#F7FBFC" d="M253 135c0-17 14-31 31-31h15c17 0 31 14 31 31v41c0 18-10 34-27 42l-16 8v42c0 6-5 11-11 11h-8c-8 0-15-7-15-15V135Z"/>
+  <path fill="#9BABB1" fill-opacity=".62" d="M268 211h19v47h-19z"/>
+  <path fill="url(#bud)" stroke="#A9B9C0" stroke-width="3" d="M486 136c0-27-21-48-48-48h-19c-27 0-49 22-49 49v42c0 26 15 49 39 60l10 5v38c0 16 13 29 29 29h7c17 0 30-13 30-29V136Z"/>
+  <path fill="#F7FBFC" d="M467 135c0-17-14-31-31-31h-15c-17 0-31 14-31 31v41c0 18 10 34 27 42l16 8v42c0 6 5 11 11 11h8c8 0 15-7 15-15V135Z"/>
+  <path fill="#9BABB1" fill-opacity=".62" d="M433 211h19v47h-19z"/>
+  <circle cx="360" cy="327" r="5" fill="#8173F1"/>
+  <circle cx="342" cy="327" r="3" fill="#B9C7CC"/>
+  <circle cx="378" cy="327" r="3" fill="#B9C7CC"/>
+  <path stroke="url(#cable)" stroke-linecap="round" stroke-width="12" d="M360 380c-7 29-33 43-40 66-10 34 31 51 72 32 27-13 57-5 63 14"/>
+  <path fill="url(#cable)" d="M450 486h39c7 0 13 6 13 13v6h-65v-6c0-7 6-13 13-13Z"/>
+  <rect width="19" height="9" x="466" y="505" fill="#4035A9" rx="3"/>
+</svg>

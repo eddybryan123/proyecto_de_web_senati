@@ -7,22 +7,9 @@ services:
     buildCommand: npm ci && npm run build
     startCommand: npm run start
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: nexo-db
-          property: connectionString
-      - key: DATABASE_SSL
-        value: "false"
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
       - key: JWT_SECRET
         generateValue: true
-
-databases:
-  - name: nexo-db
-    databaseName: nexo_cms
-    user: nexo_user
-    plan: free
-    region: oregon

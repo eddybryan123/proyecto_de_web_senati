@@ -18,7 +18,7 @@ async function getSiteConfig(): Promise<SiteConfig> {
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getSiteConfig();
   return {
-    title: `${config.name} — Ideas en movimiento`,
+    title: `${config.name} — Tienda online`,
     description: config.description,
   };
 }

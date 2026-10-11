@@ -1,31 +1,22 @@
-import Link from "next/link";
-import { SiteRenderer } from "@/components/site-renderer";
+import { Storefront } from "@/components/storefront";
 import { readRows } from "@/lib/db";
-import type { Page, PageComponent } from "@/lib/types";
+import type { Product, SiteConfig } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [page] = await readRows<Omit<Page, "components">>(
-    "SELECT id, title, slug, status, updated_at AS updatedAt FROM pages WHERE slug = 'inicio' AND status = 'published'",
-  );
-  if (!page) {
-    return (
-      <main className="empty-site">
-        <p>Este sitio todavía no tiene una página de inicio publicada.</p>
-        <Link href="/admin">Abrir el panel de control</Link>
-      </main>
-    );
-  }
-  const rows = await readRows<{ id: number; type: PageComponent["type"]; content_json: Record<string, unknown>; position: number }>(
-    "SELECT id, type, content_json, position FROM page_components WHERE page_id = $1 ORDER BY position",
-    [page.id],
-  );
-  const components = rows.map((block) => ({
-    id: block.id,
-    type: block.type,
-    content: block.content_json,
-    position: block.position,
-  }));
-  return <SiteRenderer components={components} />;
+  const [settings, products] = await Promise.all([
+    readRows<{ config_key: keyof SiteConfig; config_value: unknown }>(
+      "SELECT config_key, config_value FROM site_config",
+    ),
+    readRows<Product>(
+      `SELECT id, name, description, price_cents AS priceCents, is_active AS isActive
+       FROM products WHERE is_active = 1 ORDER BY created_at DESC, id DESC`,
+    ),
+  ]);
+  const config = Object.fromEntries(
+    settings.map(({ config_key, config_value }) => [config_key, config_value]),
+  ) as SiteConfig;
+
+  return <Storefront config={config} products={products} />;
 }
